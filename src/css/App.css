@@ -1,0 +1,40 @@
+@keyframes example {
+  from {background-color: red;}
+  to {background-color: aqua;}
+}
+
+.hoverable{
+  cursor: pointer;
+}
+
+.disabled{
+  opacity: 0.6;
+}
+
+.formated-list {
+  list-style-type: none;
+  padding: 0%;
+  margin: 0%;
+}
+
+.text-large {
+  font-size: 150%;
+}
+
+/* .fade-enter {
+  opacity: 0.01;
+}
+
+.fade-enter-active {
+  opacity: 1;
+  transition: opacity 500ms ease-in;
+}
+
+.fade-leave {
+  opacity: 1;
+}
+
+.fade-leave.fade-leave-active {
+  opacity: 0.01;
+  transition: opacity ms ease-in;
+} */

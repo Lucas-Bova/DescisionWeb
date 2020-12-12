@@ -1,25 +1,40 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import './css/App.css';
+import MainView from './Components/MainView.js';
+import LandingPage from './Components/LandingPage';
+import Catagory from './Components/CreateRoom/Catagory';
+import CustomRoom from './Components/CreateRoom/CustomRoom';
+import RoomFinal from './Components/CreateRoom/RoomFinal';
+import qs from 'qs';
+import {
+  RecoilRoot,
+  atom,
+  selector,
+  useRecoilState,
+  useRecoilValue,
+} from 'recoil';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  useLocation,
+  useParams
+} from "react-router-dom";
 
-function App() {
+function App() { 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    //need to set up router
+    <RecoilRoot>
+      <Router>
+        <Switch>
+          <Route exact path="/" component={LandingPage} />
+          <Route path="/catagory" component={Catagory} />
+          <Route path="/custom" component={CustomRoom} />
+          <Route path="/roomfinal" component={RoomFinal} /> 
+        </Switch>
+      </Router>
+    </RecoilRoot>
+
   );
 }
 
