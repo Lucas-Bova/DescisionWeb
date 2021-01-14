@@ -7,9 +7,9 @@ import {CheckCircle, XCircle, Circle} from 'react-bootstrap-icons';
 import Finish from './Finish';
 import {useCookies} from 'react-cookie';
 import GetRoom from '../APICalls/GetRoom';
-import GetToken from '../APICalls/GetToken';
-import {useRecoilState, useRecoilValue} from 'recoil';
+import {useRecoilValue} from 'recoil';
 import { APIToken } from '../Recoil/Atoms/token';
+import Loader from '../Components/PageComps/Loader';
 
 export default function MainView(props) {
 
@@ -22,7 +22,7 @@ export default function MainView(props) {
 
     const token = useRecoilValue(APIToken);
 
-    const [cookies, setCookie] = useCookies([room.Guid])
+    const [cookies, setCookie] = useCookies([room.id])
 
     useEffect(() => {
         if (token){
@@ -33,10 +33,10 @@ export default function MainView(props) {
         }
     },[token])
 
-        //maybe add a cookie check so we don't have repeat votes
+    //maybe add a cookie check so we don't have repeat votes
     useEffect(() => {
         if (room) {
-            if (cookies[room.Guid] === "true") {
+            if (cookies[room.id] === "true") {
                 setComplete(true)
             }
         }
@@ -67,7 +67,7 @@ export default function MainView(props) {
         }, 600);
         
         setYesTracker([...yesTracker, viewIndex]);
-        //don't forget to go to next
+
         if (viewIndex + 1 !== room.options.length){
             setViewIndex(viewIndex + 1);
         }
@@ -88,24 +88,27 @@ export default function MainView(props) {
 
     return(
         <div>
-            {room.options == null ? <div>Loading data...</div> :
-            <div class="container-fluid min-vh-75">
-                {false ? <Finish Room_Guid={room.id} Room_Id={room.id} id={props.id} token={props.token}/> : 
+            {room.options == null ? <Loader /> :
+            <div className="container-fluid min-vh-75">
+                {complete ? 
+                <div className="col-sm-4 offset-sm-4">
+                    <Finish Room_Guid={room.id} Room_Id={room.id} id={props.id} token={props.token}/> 
+                </div> : 
                 <div>
-                <div class="row min-vh-50">
+                <div className="row min-vh-50">
                     {viewIndex < room.options.length ? 
-                    <div class="col-sm-4 offset-sm-4 text-center pt-4 pb-5">
+                    <div className="col-sm-4 offset-sm-4 text-center pt-4 pb-5">
                         {showAnimation ? (showCheck ? <CheckCircle color="#2AA198" size={148} /> : <XCircle color="#D33682" size={148} />) : 
                             <Circle color="#839496" size={148} /> }
                     </div> : null
                     }
                 </div>
-                <div class="row min-vh-50">
-                    <div class="col-sm-4 offset-sm-4">
+                <div className="row min-vh-50">
+                    <div className="col-sm-4 offset-sm-4">
                         {viewIndex < room.options.length ? 
                         <Swipeable onSwipedLeft={(eventData) => onNoSwipe()} onSwipedRight={() => onYesSwipe(room.options[viewIndex])}>
-                            {room.options[viewIndex] ? <OptionCard option={room.options[viewIndex]} position={viewIndex + 1} total={room.options.length} 
-                            onClickLeft={(eventData) => onNoSwipe()} onClickRight={() => onYesSwipe(room.options[viewIndex])} /> : <h4>loading</h4> }
+                            {room.options[viewIndex] ? <OptionCard category={room.category} option={room.options[viewIndex]} position={viewIndex + 1} total={room.options.length} 
+                            onClickLeft={(eventData) => onNoSwipe()} onClickRight={() => onYesSwipe(room.options[viewIndex])} /> : <Loader /> }
                         </Swipeable>
                             :
                             <Finish Room_Guid={room.id} Room_Id={room.id} id={props.id} token={props.token}/>}

@@ -1,16 +1,22 @@
 import React, { useState } from 'react';
 import "../../css/bootstrap.css";
-import {Switch, useHistory} from 'react-router';
+import {useHistory} from 'react-router';
 import Header from '../PageComps/Header';
 import Footer from '../PageComps/Footer';
-import {Film, QuestionCircleFill, CupStraw} from 'react-bootstrap-icons';
+import {Film, QuestionCircleFill, CupStraw, Headphones, PersonFill, Circle, CircleFill} from 'react-bootstrap-icons';
 
 export default function CreateHome() {
     const history = useHistory();
-    const [nextRoute, setNextRoute] = useState('');
+    //const [category, setCategory] = useRecoilState(Category);
+    const [isSelected, setIsSelected] = useState(() => {
+        let initialState = [];
+        initialState.fill(false, 0, 4);
+        return initialState;
+    });
 
     const OnNextPress = () => {
-        history.push()
+        
+        history.push('/custom')
     }
 
     const OnBackPress = () => {
@@ -18,41 +24,55 @@ export default function CreateHome() {
     }
 
     const OnListClick = (e) => {
-        switch (e.target.id) {
-            case 'food':
-                history.push('/food');
-                break;
-            case 'movie':
-                history.push('/movie');
-                break;
-            case 'custom':
-                history.push('/custom');
-                break;
-        }
+        let att = e.target.attributes.val.value;
+        let tempArray = [...isSelected];
+        let item = !tempArray[e.target.id];
+        tempArray.fill(false);
+        tempArray[e.target.id] = item;
+        setIsSelected(tempArray);
+        window.sessionStorage.setItem("category", att);
     }
     return(
         <div>
-            <div class='container-fluid'>
-                <div class='row'>
-                    <div class='col-md-8 offset-md-2'>
-                        <Header titleText={"What do you want to decide!"} />
+            <div className='container-fluid'>
+                <div className='row'>
+                    <div className='col-md-8 offset-md-2'>
+                        <Header titleText={"First, let others know what you're trying to decide."} />
                     </div>
                 </div>
-                <div class='row body'>
-                    <div class='col-md-8 offset-md-2'>
-                        <ul class='formated-list'>
-                            <li id='food' class='hoverable border border-primary p-2 mb-2' onClick={() => history.push('/food')}><CupStraw class='pr-3' size={60}/> 
-                            <span class="text-large">Food Near Me</span></li>
-                            <li id='movie' class='hoverable border border-primary p-2 mb-2' onClick={() => history.push('/movie')}><Film class='pr-3' size={60}/> 
-                            <span class="text-large">Movies Near Me</span></li>
-                            <li id='custom' class='hoverable border border-primary p-2 mb-2' p-1 mb-1 onClick={() =>history.push('/custom')}><QuestionCircleFill class='pr-3' size={60}/>
-                            <span class="text-large">Custom</span></li>
-                        </ul>                      
+                <div className='row body'>
+                    <div className='col-md-8 offset-md-2'>
+                        <ul className='formated-list'>
+                            <li val="What to eat?" id={0} className='hoverable border border-primary p-2 mb-2' onClick={(e) => OnListClick(e)}><CupStraw className='pr-3' size={60}/> 
+                            <span className="text-large">What to eat</span> {isSelected[0] ? <span className='float-right pt-3 pr-5'><CircleFill size={20} /></span> :
+                             <span className='float-right pt-3 pr-5'><Circle size={20} /></span>}
+                             </li>
+
+                            <li val="What to watch?" id={1} className='hoverable border border-primary p-2 mb-2' onClick={(e) => OnListClick(e)}><Film className='pr-3' size={60}/> 
+                            <span className="text-large">What to watch</span> {isSelected[1] ? <span className='float-right pt-3 pr-5'><CircleFill size={20} /></span> :
+                             <span className='float-right pt-3 pr-5'><Circle size={20} /></span>}
+                             </li>
+
+                            <li val="What to listen to?" id={2} className='hoverable border border-primary p-2 mb-2' onClick={(e) => OnListClick(e)}><Headphones className='pr-3' size={60}/> 
+                            <span className="text-large">What to listen to</span> {isSelected[2] ? <span className='float-right pt-3 pr-5'><CircleFill size={20} /></span> :
+                             <span className='float-right pt-3 pr-5'><Circle size={20} /></span>}
+                             </li>
+
+                            <li val="What to wear?" id={3} className='hoverable border border-primary p-2 mb-2' onClick={(e) => OnListClick(e)}><PersonFill className='pr-3' size={60}/> 
+                            <span className="text-large">What to wear</span> {isSelected[3] ? <span className='float-right pt-3 pr-5'><CircleFill size={20} /></span> :
+                             <span className='float-right pt-3 pr-5'><Circle size={20} /></span>}
+                             </li>
+
+                            <li val="Custom?" id={4} className='hoverable border border-primary p-2 mb-2' onClick={(e) => OnListClick(e)}><QuestionCircleFill className='pr-3' size={60}/>
+                            <span className="text-large">Something else</span> {isSelected[4] ? <span className='float-right pt-3 pr-5'><CircleFill size={20} /></span> :
+                             <span className='float-right pt-3 pr-5'><Circle size={20} /></span>}
+                             </li>
+                        </ul>                  
                     </div>
                 </div>
-                <div class="row">
-                    <div class='col-md-8 offset-md-2 text-center'>
-                        <Footer enabledBack={true} enabledNext={false} onNextPress={OnNextPress} onBackPress={OnBackPress} />
+                <div className="row">
+                    <div className='col-md-8 offset-md-2 text-center'>
+                        <Footer enabledBack={true} enabledNext={isSelected.includes(true) ? true : false} onNextPress={OnNextPress} onBackPress={OnBackPress} />
                     </div>
                 </div>
             </div>

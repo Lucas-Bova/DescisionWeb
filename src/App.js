@@ -1,24 +1,16 @@
 import React from 'react';
 import './css/App.css';
-import MainView from './Components/MainView.js';
 import LandingPage from './Components/LandingPage';
 import Catagory from './Components/CreateRoom/Catagory';
 import CustomRoom from './Components/CreateRoom/CustomRoom';
 import RoomFinal from './Components/CreateRoom/RoomFinal';
-import qs from 'qs';
 import {
-  RecoilRoot,
-  atom,
-  selector,
-  useRecoilState,
-  useRecoilValue,
+  RecoilRoot
 } from 'recoil';
 import {
   BrowserRouter as Router,
   Switch,
-  Route,
-  useLocation,
-  useParams
+  Route
 } from "react-router-dom";
 
 function App() { 
